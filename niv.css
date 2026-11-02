@@ -11,11 +11,11 @@
 }
 
 .clothing-section {
-  grid-column: 2;
+    grid-column: 2;
 }
 
 /*CSS til billedekort*/
-.container {
+.picture-container {
     display: flex;
     gap: 25px;
 }
@@ -23,9 +23,10 @@
 .picture-card {
     border-radius: 8px;
     overflow: hidden;
-    flex-grow: 1;
-    height: 200px;
-    background-color: #D8EBF6;
+    height: 260px;
+    background-color: #e3f0f7;
+    flex: 1;            
+    min-width: 0; 
 }
 
 .picture-card img {
