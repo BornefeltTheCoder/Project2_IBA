@@ -23,7 +23,7 @@
 .picture-card {
     border-radius: 8px;
     overflow: hidden;
-    height: 260px;
+    height: 300px;
     background-color: #e3f0f7;
     flex: 1;            
     min-width: 0; 
