@@ -106,8 +106,8 @@ server.listen(3000, function () {
 
 
 
-//tilføj bruger halløj - præferencer og login
 
+//tilføj bruger halløj - præferencer og login
 const username = "halløj";
-const password = "123456";
+
 

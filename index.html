@@ -1,18 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap%22
+        rel="stylesheet">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
-   
+ 
 </head>
+ 
 <body>
-
-   <button onclick="findGeoLocation()">
-    Find min lokation
-</button>
-
-
+ 
+    <header>
+        <div id="header-container">
+            <img src="simon_filer/Logo.svg" id="logo" alt="">
+            <a href="simon.html" id="home-nav">DMI</a>
+        </div>
+        <ul id="nav">
+            <li>Vejret</li>
+            <li>Danmark</li>
+            <li>Prognose</li>
+        </ul>
+    </header>
+ 
+ 
+    <main>
+        <div class="two-column-grid">
+ 
+            <div class="weather-section">
+ 
+ 
+                <div class="search-card">
+                    <h2>Se vejret</h2>
+ 
+                    <form class="search-form">
+                        <input type="search" id="city" name="city" placeholder="Søg efter en by">
+                        <button type="submit" aria-label="Søg">&#128269;</button>
+                    </form>
+ 
+                </div>
+ 
+                <div class="weather-result"></div>
+ 
+            </div>
+ 
+            <div class="clothing-section">
+                <div class="picture-container">
+                    <div class="picture-card">
+                        <img src="images/rainy1.png" alt="alt text">
+                    </div>
+ 
+                    <div class="picture-card">
+                        <img src="images/rainy2.png" alt="alt text">
+                    </div>
+ 
+                    <div class="picture-card">
+                        <img src="images/rainy3.png" alt="alt text">
+                    </div>
+                </div>
+                <div class="text-card">
+                    <h2>Tekst</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur error doloribus officiis!
+                        Voluptates, iste eius quam eligendi exercitationem magnam aut dolore. Illum voluptates et ab
+                        molestias illo dignissimos, pariatur sapiente.</p>
+                </div>
+            </div>
+ 
+        </div>
+    </main>
+ 
+ 
+    <footer>
+        <h4>Nicklas Oliver Bornefelt Madsen</h4>
+        <h4>Nicoline Kielberg</h4>
+        <h4>Nirvana Snebjørk Leth</h4>
+        <h4>Simon Andersen</h4>
+    </footer>
+ 
+ 
+    <!-- <button onclick="hentLokation()">
+        Find min lokation
+    </button> -->
+ 
+ 
 </body>
+ 
 </html>
