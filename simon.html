@@ -1,37 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="simon.css">
-  <script src="simon.js"></script>
   <title>Document</title>
 </head>
-
 <body>
-  <header>
-    <div id="header-container">
-      <img src="simon_filer/Logo.svg" id="logo" alt="">
-      <a href="simon.html" id="home-nav">DMI</a>
-      <form class="registrer-form">
-        <input type="text" id="registrer" name="registrer"
-          placeholder="Indtast dit navn for at registrere dig som bruger">
-        <button type="submit" id="registrer-knap">Register her</button>
-        <p id="registrer-besked"></p>
-
-      </form>
-
+  
+    <dialog id="lock-screen">
+    <div class="modal-content">
+      <h2>Registrer dig her</h2>
+      <p>Indtast venligst et brugernavn.</p>
+      <input id="input-field" type="text">
+      <p id="warning-text"></p>
+      <button id="unlock-btn">Bekræft</button>
     </div>
-    <ul id="nav">
-      <li>Vejret</li>
-      <li>Danmark</li>
-      <li>Prognose</li>
-      <button id="toggle-mode">Dark mode</button>
-
-    </ul>
-  </header>
-
+  </dialog>
+  
 </body>
-
 </html>

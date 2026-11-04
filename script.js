@@ -26,7 +26,7 @@ const Default_Location = {
 
 //funktion til at hente brugerens location.
 function findGeoLocation() {
-    if(!navigator.geolocation){
+    if (!navigator.geolocation) {
         brugDefaultLokation();
         return;
     }
@@ -44,7 +44,7 @@ function findGeoLocation() {
             console.error("Fejl ved hentning af lokation:", error);
             brugDefaultLokation();
         },
-        {timeout: 8000}
+        { timeout: 8000 }
     );
 }
 
@@ -61,18 +61,18 @@ async function hentVejrData(latitude, longitude, byNavn) {
     const url = `/vejr?latitude=${latitude}&longitude=${longitude}`;
 
     try {
-        //sender en http request til vores node.js server og venter på resposne
+        //sender en http request til vores node.js server og venter på response
         const response = await fetch(url);
 
         //hvis response ikke er ok så sendes der en fejl fra serveren
         if (!response.ok) {
             throw new Error("Fejl fra serveren: " + response.status);
-        } else if (response.ok) {
+        }
 
         //hvis responsen er ok, henter vi data fra serveren og konverterer det til JSON format
         const data = await response.json();
 
-        //kalder funktionen visVejrData her for at vise dataen i konsollen
+        //kalder funktionen visVejrData her for at vise dataen
         visVejrData(data);
 
         if (byNavn) {
@@ -80,7 +80,8 @@ async function hentVejrData(latitude, longitude, byNavn) {
         } else {
             visByNavn(latitude, longitude);
         }
-    }} catch (error) {
+
+    } catch (error) {
         console.error("Fejl i hentning af data fra serveren:", error);
     }
 }
@@ -99,19 +100,18 @@ function visVejrData(data) {
     document.getElementById("currentTime").textContent = data.current.time.split("T")[1];
 
     visNæsteDagesTemperatur(data);
-    hentUgedage(data);   
+    hentUgedage(data);
 }
 
-/*forbinder billeder og vejr via vejrkoder og temperatur*/
 /*forbinder billeder og tekst med vejr via vejrkoder og temperatur*/
 function visBilleder(vejrKode, temperatur) {
- 
+
     let type;
- 
+
     const erRegn = (vejrKode >= 51 && vejrKode <= 67) || (vejrKode >= 80 && vejrKode <= 82);
     const erTorden = vejrKode >= 95 && vejrKode <= 99;
     const erSne = (vejrKode >= 71 && vejrKode <= 77) || (vejrKode >= 85 && vejrKode <= 86);
- 
+
     if (erRegn || erTorden) {
         type = "rainy";
     } else if (temperatur < 12 || erSne) {
@@ -121,24 +121,30 @@ function visBilleder(vejrKode, temperatur) {
     } else {
         type = "cloudy";
     }
- 
+
     console.log("Type:", type);
- 
+
     //billeder
     const billeder = document.querySelectorAll(".picture-card img");
     console.log("Antal billeder fundet:", billeder.length);
- 
+
     billeder.forEach(function (billede, index) {
         billede.src = `images/${type}${index + 1}.png`;
         console.log("Sat src til:", billede.src);
     });
- 
+
     // Tekst
     const greeting = document.querySelector(".text-card h2");
     const description = document.querySelector(".text-card p");
- 
+
+    // NYT: Henter det registrerede brugernavn fra localStorage.
+    // Hvis der ikke er gemt et navn, bruges en tom tekst (så der ikke står "null").
+    const navn = localStorage.getItem("brugernavn") || "";
+
     if (greeting && description) {
-        greeting.textContent = clothingText[type].greeting;
+        // NYT: Erstatter pladsholderen "-navn-" med brugerens rigtige navn.
+        // Hvis der ikke er noget navn, fjernes også mellemrummet, så der bare står "Hej".
+        greeting.textContent = clothingText[type].greeting.replace(" -navn-", navn ? " " + navn : "");
         description.textContent = clothingText[type].description;
     }
 }
@@ -204,7 +210,7 @@ function validateLocation(location) {
 }
 
 // Registrerer når brugeren søger
-searchForm.addEventListener("submit", function(event) {
+searchForm.addEventListener("submit", function (event) {
     // Forhindrer siden i at genindlæse
     event.preventDefault();
 
@@ -227,4 +233,94 @@ searchForm.addEventListener("submit", function(event) {
     }
 });
 
+
+// ---------- BRUGERREGISTRERING (dialog) ----------
+// NYT: Erstatter den gamle registrerings-formular. Dialogen (#lock-screen) står i index.html.
+
+const lockScreen = document.getElementById("lock-screen");
+const unlockBtn = document.getElementById("unlock-btn");
+const inputField = document.getElementById("input-field");
+const warningText = document.getElementById("warning-text");
+
+// NYT: Dialogen vises kun, hvis brugeren IKKE allerede har et navn gemt i localStorage.
+// showModal() låser baggrunden (show() gør ikke).
+if (!localStorage.getItem("brugernavn")) {
+    lockScreen.showModal();
+}
+
+// NYT: Forhindrer, at dialogen lukkes med Escape-tasten.
+lockScreen.addEventListener("cancel", (e) => e.preventDefault());
+
+// NYT: Når brugeren trykker på "Bekræft", tjekkes navnet og sendes til serveren.
+unlockBtn.addEventListener("click", () => {
+    const brugernavn = inputField.value.trim();
+
+    if (brugernavn === "") {
+        warningText.textContent = "Du skal skrive et brugernavn";
+        return;
+    }
+
+    registrerBruger(brugernavn);
+});
+
+// NYT: Sender navnet til serveren og lukker først dialogen, når serveren har godkendt det.
+async function registrerBruger(brugernavn) {
+    try {
+        // Post fordi vi sender data der skal gemmes
+        const response = await fetch("/registrer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ brugernavn: brugernavn })
+        });
+
+        // Parser teksten til et objekt
+        const data = await response.json();
+
+        // Hvis serveren afviser navnet (fx for kort eller allerede taget),
+        // vises serverens besked i dialogen, og dialogen forbliver åben.
+        if (!response.ok) {
+            warningText.textContent = data.besked;
+            return;
+        }
+
+        // Alt er godt: gem navnet, ryd feltet og luk dialogen.
+        localStorage.setItem("brugernavn", brugernavn);
+        warningText.textContent = "";
+        inputField.value = "";
+        lockScreen.close();
+
+    } catch (error) {
+        console.error("Fejl ved registrering", error);
+        warningText.textContent = "Kunne ikke kontakte serveren.";
+    }
+}
+
+
+// ---------- DARK MODE ----------
+// NYT: Dark mode gemmes i localStorage og sendes til serveren, hvis brugeren er registreret.
+
+const toggleBtn = document.getElementById("toggle-mode");
+
+if (localStorage.getItem("tema") === "dark") {
+    document.body.classList.add("dark-mode");
+}
+
+toggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+
+    const tema = document.body.classList.contains("dark-mode") ? "dark" : "light";
+    localStorage.setItem("tema", tema);
+
+    const brugernavn = localStorage.getItem("brugernavn");
+    if (brugernavn) {
+        fetch("/tema", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ brugernavn: brugernavn, tema: tema })
+        });
+    }
+});
+
+
+// Henter vejret når siden indlæses
 findGeoLocation();
