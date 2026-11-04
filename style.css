@@ -94,103 +94,79 @@
   font-size: 20px;
 }
  
-/*VEJR KORT*/
-
 /* VEJR KORT */
 
 .weather-result {
-    display: block;
-    flex-direction: row;
-    align-items: center;
-    gap: 24px;
-
     background: #FFFFFF;
     padding: 24px;
+    margin-top: 16px;
     border-radius: 8px;
     box-shadow: 0 4px 10px -6px rgba(32, 36, 42, .25);
-    margin-top: 16px;
 }
 
-/* Bynavn */
-.weather_location {
-    flex: 1;
+#cityName {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 16px;
 }
 
-/* Dagens vejr */
-.todays_weather {
-    flex: 2;
-    border-left: 1px solid #D3D3D3;
-    padding-left: 24px;
+/* INDHOLD */
+
+.weather-content {
+    display: grid;
+    grid-template-columns: 1.4fr 2fr;
+    align-items: center;
+    gap: 40px;
 }
 
-.weather_info {
+/* DAGENS VEJR */
+
+.todays-weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.today-weather {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
 #weather_icon_today {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     object-fit: contain;
 }
 
-.today_weather_data {
+.today-weather-data {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.today_weather_data p {
-    margin: 0;
-}
+/* KOMMENDE DAGE */
 
-#temperatur {
-    font-size: 2rem;
-    font-weight: 600;
-}
-
-/* Vind */
-.wind_info {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.wind_info img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-}
-
-/* De næste to dage */
 .forecast {
-    flex: 2;
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
     gap: 24px;
-    border-left: 1px solid #D3D3D3;
-    padding-left: 24px;
 }
 
-.forecast_day {
+.forecast-day {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
-.forecast_day img {
+.forecast-day img {
     width: 64px;
     height: 64px;
     object-fit: contain;
 }
-
-.forecast_day p:last-child {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
 
  
 /*Header + Footer */
@@ -299,4 +275,3 @@ body.dark-mode {
     font-size: 1rem;
   }
 }
-

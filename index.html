@@ -50,42 +50,52 @@
                     </form>
                 </div>
 
-                <!-- sektion kort som viser dagens vejr og de næste 2 dage -->
+              <!-- Vejrkort -->
                 <div class="weather-result">
-                    <section class="weather_location">
-                        <h2 id="cityName"></h2>
-                    </section>
+                    <h2 id="cityName"></h2>
 
-                    <section class="todays_weather">
-                        <p id="day"></p>
+                    <div class="weather-content">
 
-                        <div class="weather_info">
-                            <img id="weather_icon_today" src="" alt="weather_icon_today">
+                         <!-- Dagens vejr -->
+                        <section class="todays-weather">
+                            <p id="day"></p>
 
-                            <div class="today_weather_data">
-                                <p id="temperatur"></p>
-                                <p>vind <span id="currentWind">---</span> m/s </span></p>
-                                <p id="currentTime"></p>
+                            <div class="today-weather">
+                                <img id="weather_icon_today" src="images/icons/torden.png"alt="">
+
+                                <div class="today-weather-data">
+                                    <p id="temperatur"></p>
+                                    <p>Vind <span id="currentWind"></span> m/s</p>
+                                </div>
                             </div>
+
+                            <p>Kl: <span id="currentTime"></span></p>
+                        </section>
+
+                          <!-- Kommende dage -->
+                        <div class="forecast">
+
+                            <article class="forecast-day">
+                                <p id="day1"></p>
+                                <img id="weather_icon_day1" src="images/icons/klar.png"alt="">
+                                <p id="temperatur_day1"></p>
+                            </article>
+
+                            <article class="forecast-day">
+                                <p id="day2"></p>
+                                <img id="weather_icon_day2" src="images/icons/klar.png"alt="">
+                                <p id="temperatur_day2"></p>
+                            </article>
+
+                            <article class="forecast-day">
+                                <p id="day3"></p>
+                                <img id="weather_icon_day3" src="images/icons/klar.png"alt="">
+                                <p id="temperatur_day3"></p>
+                            </article>
+
                         </div>
-                    </section>
-
-                    <div class="forecast">
-                        <article class="forecast_day">
-                            <p id="day1"></p>
-                            <img id="weather_icon_day1" src="" alt="weather_icon_day">
-                            <p id="temperatur_day1"></p>
-                        </article>
-
-                        <article class="forecast_day">
-                            <p id="day2"></p>
-                            <img id="weather_icon_day2" src="" alt="weather_icon_day">
-                            <p id="temperatur_day2"></p>
-                        </article>
                     </div>
                 </div>
-
-
 
             </div>
 
