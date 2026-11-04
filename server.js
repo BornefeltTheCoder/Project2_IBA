@@ -44,6 +44,8 @@ const server = http.createServer(async function (req, res) {
         return;
     }
 
+    
+
     // Hent HTML - 
     if (req.url === "/") {
 

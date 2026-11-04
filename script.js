@@ -21,7 +21,7 @@ const clothingText = {
 const Default_Location = {
     latitude: 55.40,
     longitude: 10.39,
-    navn: "Odense"
+    byNavn: "Odense"
 };
 
 //funktion til at hente brugerens location.
@@ -37,7 +37,7 @@ function findGeoLocation() {
             const longitude = position.coords.longitude;
 
             //kalder funktionen hentVejr med latitude og longitude som parametre
-            hentVejrData(latitude, longitude, "Din lokation");
+            hentVejrData(latitude, longitude);
         },
 
         function (error) {
@@ -48,12 +48,12 @@ function findGeoLocation() {
     );
 }
 
-function brugDefaultLokation(){
+function brugDefaultLokation() {
     hentVejrData(
-        Default_Location.latitude, 
-        Default_Location_longitude,
-        Default_Location_byNavn 
-    )
+        Default_Location.latitude,
+        Default_Location.longitude,
+        Default_Location.byNavn
+    );
 }
 
 async function hentVejrData(latitude, longitude, byNavn) {
@@ -74,8 +74,12 @@ async function hentVejrData(latitude, longitude, byNavn) {
 
         //kalder funktionen visVejrData her for at vise dataen i konsollen
         visVejrData(data);
-        visByNavn(byNavn);
 
+        if (byNavn) {
+            document.getElementById("cityName").textContent = byNavn;
+        } else {
+            visByNavn(latitude, longitude);
+        }
     }} catch (error) {
         console.error("Fejl i hentning af data fra serveren:", error);
     }
@@ -146,9 +150,18 @@ function visVejrIcon(vejrKode, billedID) {
 }
 
 //funktion til at finde brugerens by
-function visByNavn(byNavn) {
-    const byNavnElement = document.getElementById("cityName");
-    byNavnElement.textContent = byNavn;
+async function visByNavn(latitude, longitude) {
+    try {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=da`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+        const byNavn = data.address.city;
+        document.getElementById("cityName").textContent = byNavn || "Ukendt by";
+
+    } catch (error) {
+        console.error("Fejl ved hentning af bynavn:", error);
+    }
 }
 
 //funktion til at vise temperatur
