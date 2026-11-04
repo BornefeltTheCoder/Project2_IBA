@@ -18,8 +18,6 @@ const server = http.createServer(async function (req, res) {
 
        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&forecast_days=3&models=dmi_seamless&timezone=auto&wind_speed_unit=ms&current=temperature_2m,weather_code,wind_speed_10m,is_day&daily=weather_code,temperature_2m_max`;
 
-        
-
         //try...catch blok til at håndtere fejl under fetch - sender forespørgslen til Open-Meteo API'en og håndterer svaret som gemmes i response.
         try {
 
