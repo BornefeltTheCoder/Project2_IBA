@@ -113,7 +113,7 @@ const server = http.createServer(async function (req, res) {
  
         });
     }
-});
+
 
 // BRUGER REGISTRERING
 
@@ -231,10 +231,10 @@ const server = http.createServer(async function (req, res) {
         });
         return;
     }
-
+});
 
 // Start serveren
-server.listen(3009, function () {
+server.listen(3000, function () {
     console.log("Serveren kører på http://localhost:3000");
 });
 
