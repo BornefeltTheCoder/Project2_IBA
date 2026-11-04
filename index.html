@@ -32,9 +32,7 @@
  
     <main>
         <div class="two-column-grid">
- 
             <div class="weather-section">
- 
  
                 <div class="search-card">
                     <h2>Se vejret</h2>
@@ -43,11 +41,45 @@
                         <input type="search" id="city" name="city" placeholder="Søg efter en by">
                         <button type="submit" aria-label="Søg">&#128269;</button>
                     </form>
- 
                 </div>
  
-                <div class="weather-result"></div>
- 
+                <!-- sektion kort som viser dagens vejr og de næste 2 dage -->
+                 <div class="weather-result">
+                    <section class="weather_location">
+                        <h2 id="cityName"></h2>
+                    </section>
+
+                    <section class = "todays_weather">
+                        <p id = "day"></p>
+                        
+                        <div class="weather_info">
+                            <img id = "weather_icon_today" src="" alt="weather_icon_today">
+
+                            <div class="today_weather_data">
+                                <p id = "temperatur"></p>
+                                <p>vind <span id = "currentWind">---</span> m/s </span></p>
+                                <p id = "currentTime"></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="forecast">
+                        <article class="forecast_day">
+                            <p id = "day1"></p>
+                            <img id = "weather_icon_day1" src="" alt="weather_icon_day">
+                            <p id = "temperatur_day1"></p>
+                        </article>
+
+                        <article class="forecast_day">
+                            <p id = "day2"></p>
+                            <img id = "weather_icon_day2" src="" alt="weather_icon_day">
+                            <p id = "temperatur_day2"></p>
+                        </article>
+                    </div>
+                </div>
+
+
+
             </div>
  
             <div class="clothing-section">
@@ -83,12 +115,10 @@
         <h4>Simon Andersen</h4>
     </footer>
  
- 
-    <!-- <button onclick="hentLokation()">
-        Find min lokation
-    </button> -->
- 
- 
 </body>
  
+<button onclick="findGeoLocation()">
+    Find min lokation
+</button>
+
 </html>

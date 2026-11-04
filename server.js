@@ -16,8 +16,9 @@ const server = http.createServer(async function (req, res) {
 
         const longitude = koordinater[1].split("=")[1]; //tager værdien efter lighedstegnet
 
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,wind_speed_10m&forecast_days=3&timezone=Europe%2FCopenhagen`;
+       const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&forecast_days=3&models=dmi_seamless&timezone=auto&wind_speed_unit=ms&current=temperature_2m,weather_code,wind_speed_10m,is_day&daily=weather_code,temperature_2m_max`;
 
+        
 
         //try...catch blok til at håndtere fejl under fetch - sender forespørgslen til Open-Meteo API'en og håndterer svaret som gemmes i response.
         try {
@@ -97,14 +98,29 @@ const server = http.createServer(async function (req, res) {
 
         });
     }
+
+     // Hent billeder fra images-mappen
+    else if (req.url.startsWith("/images/")) {
+ 
+        fs.readFile("." + req.url, function (error, data) {
+ 
+            if (error) {
+                res.writeHead(404);
+                res.end("Filen blev ikke fundet.");
+                return;
+            }
+ 
+            res.writeHead(200, { "Content-Type": "image/png" });
+            res.end(data);
+ 
+        });
+    }
 });
 
 // Start serveren
 server.listen(3000, function () {
     console.log("Serveren kører på http://localhost:3000");
 });
-
-
 
 
 //tilføj bruger halløj - præferencer og login
