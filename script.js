@@ -1,3 +1,24 @@
+//tekster til påklædning
+const clothingText = {
+    rainy: {
+        greeting: "Hej -navn-",
+        description: "Det regner, så en god regnjakke og et par gummistøvler er et oplagt valg. Tag også gerne en paraply med, hvis regnen tager til. Så er du godt forberedt og kan holde dig tør, når du skal udenfor."
+    },
+    cold: {
+        greeting: "Hej -navn-",
+        description: "Det er koldt udenfor, så det er tid til at finde det varme tøj frem. En vinterjakke, hue, handsker og et par varme støvler er et godt valg. Så er du godt klædt på til de lave temperaturer, når du skal udenfor."
+    },
+    sunny: {
+        greeting: "Hej -navn-",
+        description: "Temperaturen er høj, så det er tid til at finde sommertøjet frem. En T-shirt, shorts og et par sandaler passer godt til det varme vejr. Husk også solcreme, hvis du skal opholde dig i solen i længere tid."
+    },
+    cloudy: {
+        greeting: "Hej -navn-",
+        description: "Vejret er hverken for varmt eller for koldt, så en let trøje, lange bukser og et par sneakers passer godt til temperaturen."
+    }
+};
+
+
 //funktion til at hente brugerens location.
 function findGeoLocation() {
     navigator.geolocation.getCurrentPosition( //henter brugerens lokation
@@ -59,6 +80,7 @@ function visVejrData(data) {
 }
 
 /*forbinder billeder og vejr via vejrkoder og temperatur*/
+/*forbinder billeder og tekst med vejr via vejrkoder og temperatur*/
 function visBilleder(vejrKode, temperatur) {
  
     let type;
@@ -69,7 +91,7 @@ function visBilleder(vejrKode, temperatur) {
  
     if (erRegn || erTorden) {
         type = "rainy";
-    } else if (temperatur < 5 || erSne) {
+    } else if (temperatur < 12 || erSne) {
         type = "cold";
     } else if (temperatur > 20) {
         type = "sunny";
@@ -79,6 +101,7 @@ function visBilleder(vejrKode, temperatur) {
  
     console.log("Type:", type);
  
+    //billeder
     const billeder = document.querySelectorAll(".picture-card img");
     console.log("Antal billeder fundet:", billeder.length);
  
@@ -86,6 +109,15 @@ function visBilleder(vejrKode, temperatur) {
         billede.src = `images/${type}${index + 1}.png`;
         console.log("Sat src til:", billede.src);
     });
+ 
+    // Tekst
+    const greeting = document.querySelector(".text-card h2");
+    const description = document.querySelector(".text-card p");
+ 
+    if (greeting && description) {
+        greeting.textContent = clothingText[type].greeting;
+        description.textContent = clothingText[type].description;
+    }
 }
 
 function visVejrIcon(vejrKode, billedID) {
