@@ -238,8 +238,3 @@ server.listen(3000, function () {
     console.log("Serveren kører på http://localhost:3000");
 });
 
-
-//tilføj bruger halløj - præferencer og login
-const username = "halløj";
-
-

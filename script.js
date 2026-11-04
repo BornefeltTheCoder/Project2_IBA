@@ -18,23 +18,42 @@ const clothingText = {
     }
 };
 
+const Default_Location = {
+    latitude: 55.40,
+    longitude: 10.39,
+    navn: "Odense"
+};
 
 //funktion til at hente brugerens location.
 function findGeoLocation() {
-    navigator.geolocation.getCurrentPosition( //henter brugerens lokation
+    if(!navigator.geolocation){
+        brugDefaultLokation();
+        return;
+    }
 
+    navigator.geolocation.getCurrentPosition( //henter brugerens lokation
         function (position) { //hvis lokation er hentet, så hentes latitude og longitude
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
 
             //kalder funktionen hentVejr med latitude og longitude som parametre
-            hentVejrData(latitude, longitude);
+            hentVejrData(latitude, longitude, "Din lokation");
         },
 
         function (error) {
             console.error("Fejl ved hentning af lokation:", error);
-        }
+            brugDefaultLokation();
+        },
+        {timeout: 8000}
     );
+}
+
+function brugDefaultLokation(){
+    hentVejrData(
+        Default_Location.latitude, 
+        Default_Location_longitude,
+        Default_Location_byNavn 
+    )
 }
 
 async function hentVejrData(latitude, longitude, byNavn) {
@@ -55,7 +74,7 @@ async function hentVejrData(latitude, longitude, byNavn) {
 
         //kalder funktionen visVejrData her for at vise dataen i konsollen
         visVejrData(data);
-        // visByNavn(byNavn);
+        visByNavn(byNavn);
 
     }} catch (error) {
         console.error("Fejl i hentning af data fra serveren:", error);
@@ -158,7 +177,6 @@ function hentUgedage(data) {
         new Date(data.daily.time[2] + "T00:00:00").toLocaleDateString("da-DK", { weekday: "long" });
 }
 
-
 const searchForm = document.querySelector(".search-form");
 const cityInput = document.querySelector("#city");
 const weatherResult = document.querySelector(".weather-result");
@@ -196,75 +214,4 @@ searchForm.addEventListener("submit", function(event) {
     }
 });
 
-
-    // Opsætning af brugerlogin
-
-const registrerForm = document.querySelector(".registrer-form")
-const registrerInput = document.getElementById("registrer")
-const registrerBesked = document.getElementById("registrer-besked")
-
-registrerForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    // Tager brugerens skrevne værdi.
-    const brugernavn = registrerInput.value.trim();
-
-    if (brugernavn === "") {
-        registrerBesked.textContent = "Du skal skrive et navn"
-        return;
-    }
-
-    // Er navnet godtaget sendes funktionen afsted
-    registrerBruger(brugernavn);
-});
-
-async function registrerBruger(brugernavn) {
-    try {
-        // Post fordi vi sender data der skal gemmes
-        const response = await fetch("/registrer", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ brugernavn: brugernavn })
-        });
-
-        // Parser teksten til et objekt
-        const data = await response.json();
-
-        // Hvis serveren fejler svarer den med en fejlmeddelelse 
-        if (!response.ok) {
-            registrerBesked.textContent = data.besked;
-            return;
-        }
-
-        // Hvis alt er godt bliver inputet feltet tømt.
-        registrerBesked.textContent = data.besked;
-        registrerInput.value = "";
-        localStorage.setItem("brugernavn", brugernavn);
-
-    } catch (error) {
-        console.error("Fejl ved registrering", error);
-        registrerBesked.textContent = "Kunne ikke kontakte serveren.";
-    }
-}
-
-const toggleBtn = document.getElementById("toggle-mode")
-
-if (localStorage.getItem("tema") === "dark") {
-    document.body.classList.add("dark-mode");
-}
-
-toggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-
-    const tema = document.body.classList.contains("dark-mode") ? "dark" : "light";
-    localStorage.setItem("tema", tema);
-
-    const brugernavn = localStorage.getItem("brugernavn");
-    if (brugernavn) {
-        fetch("/tema", {
-            method: "POST",
-            headers: {"Content-Type": "application/json" },
-            body: JSON.stringify({ brugernavn: brugernavn, tema: tema})
-        });
-    }
-});
+findGeoLocation();
