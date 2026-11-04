@@ -115,8 +115,126 @@ const server = http.createServer(async function (req, res) {
     }
 });
 
+// BRUGER REGISTRERING
+
+    // Tjekker om både adressen og metode passer.
+    if (req.url === "/registrer" && req.method === "POST") {
+
+        // Vores tomme tekststreng der samler vores sendte data
+        let body = "";
+
+        // Samler voers data hver gang det ankommer fra browseren.
+        req.on("data", function (chunk) {
+            body += chunk;
+        });
+
+        // Når al data er modtaget, kører denne funktion
+        req.on("end", function () {
+            try {
+                const data = JSON.parse(body); // Laver teksten om til et objekt 
+                const brugernavn = String(data.brugernavn || "").trim(); // Og værdien hentes ud
+
+                if (brugernavn.length < 2 || brugernavn.length > 30) {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ besked: "Navnet skal være mellem 2 og 30 tegn." }));
+                    return;
+                }
+
+
+                // Læser eksisterende brugere, eller starter med en tom liste.
+                let brugere = [];
+                if (fs.existsSync("brugere.json")) {
+                    brugere = JSON.parse(fs.readFileSync("brugere.json", "utf8"))
+                }
+
+                // Tjekker om navnet allerede er taget
+                const findes = brugere.some(function (bruger) {
+                    return bruger.brugernavn.toLowerCase() === brugernavn.toLowerCase();
+                });
+
+                if (findes) {
+                    res.writeHead(409, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ besked: "Brugernavnet er allerede taget." }));
+                    return;
+                }
+
+                brugere.push({ brugernavn: brugernavn, oprettet: new Date().toISOString(), tema: "light" });
+                fs.writeFileSync("brugere.json", JSON.stringify(brugere, null, 2));
+
+                console.log("Ny bruger registreret:", brugernavn);
+
+                res.writeHead(201, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ besked: "Du er registreret som " + brugernavn + "!" }));
+
+
+            } catch (error) {
+                console.error("Fejl ved registrering", error);
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ besked: "Ugyldig forspørgsel" }));
+            };
+        });
+
+        return;
+    }
+
+    // GEM TEMA
+
+    if (req.url === "/tema" && req.method === "POST") {
+
+        // Vores tomme tekststreng der samler vores sendte data
+        let body = "";
+
+        // Samler voers data hver gang det ankommer fra browseren.
+        req.on("data", function (chunk) {
+            body += chunk;
+        });
+
+        // Når al data er modtaget, kører denne funktion
+        req.on("end", function () {
+            try {
+                const data = JSON.parse(body); // Laver teksten om til et objekt 
+                const brugernavn = String(data.brugernavn || "").trim(); // Og værdien hentes ud
+                const tema = data.tema === "dark" ? "dark" : "light"
+
+                if (!fs.existsSync("brugere.json")) {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ besked: "Ingen brugere fundet." }));
+                    return;
+                }
+
+                const brugere = JSON.parse(fs.readFileSync("brugere.json", "utf-8"));
+
+                const bruger = brugere.find(function (b) {
+                    return b.brugernavn.toLowerCase() === brugernavn.toLowerCase();
+                });
+
+                if (!bruger) {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ besked: "Brugeren findes ikke." }));
+                    return;
+                }
+
+                bruger.tema = tema;
+                fs.writeFileSync("brugere.json", JSON.stringify(brugere, null, 2));
+
+                console.log("Tema gemt for", brugernavn, ":", tema);
+
+                   res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ besked: "Tema gemt." }));
+
+
+            } catch (error) {
+                console.error("Fejl ved tema", error);
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ besked: "Ugyldig forspørgsel" }));
+            };
+        });
+        return;
+    }
+
+
 // Start serveren
-server.listen(3000, function () {
+server.listen(3009, function () {
     console.log("Serveren kører på http://localhost:3000");
 });
 

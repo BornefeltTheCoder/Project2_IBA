@@ -195,3 +195,76 @@ searchForm.addEventListener("submit", function(event) {
         weatherResult.textContent = "Indtast venligst et gyldigt dansk bynavn eller postnummer.";
     }
 });
+
+
+    // Opsætning af brugerlogin
+
+const registrerForm = document.querySelector(".registrer-form")
+const registrerInput = document.getElementById("registrer")
+const registrerBesked = document.getElementById("registrer-besked")
+
+registrerForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // Tager brugerens skrevne værdi.
+    const brugernavn = registrerInput.value.trim();
+
+    if (brugernavn === "") {
+        registrerBesked.textContent = "Du skal skrive et navn"
+        return;
+    }
+
+    // Er navnet godtaget sendes funktionen afsted
+    registrerBruger(brugernavn);
+});
+
+async function registrerBruger(brugernavn) {
+    try {
+        // Post fordi vi sender data der skal gemmes
+        const response = await fetch("/registrer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ brugernavn: brugernavn })
+        });
+
+        // Parser teksten til et objekt
+        const data = await response.json();
+
+        // Hvis serveren fejler svarer den med en fejlmeddelelse 
+        if (!response.ok) {
+            registrerBesked.textContent = data.besked;
+            return;
+        }
+
+        // Hvis alt er godt bliver inputet feltet tømt.
+        registrerBesked.textContent = data.besked;
+        registrerInput.value = "";
+        localStorage.setItem("brugernavn", brugernavn);
+
+    } catch (error) {
+        console.error("Fejl ved registrering", error);
+        registrerBesked.textContent = "Kunne ikke kontakte serveren.";
+    }
+}
+
+const toggleBtn = document.getElementById("toggle-mode")
+
+if (localStorage.getItem("tema") === "dark") {
+    document.body.classList.add("dark-mode");
+}
+
+toggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+
+    const tema = document.body.classList.contains("dark-mode") ? "dark" : "light";
+    localStorage.setItem("tema", tema);
+
+    const brugernavn = localStorage.getItem("brugernavn");
+    if (brugernavn) {
+        fetch("/tema", {
+            method: "POST",
+            headers: {"Content-Type": "application/json" },
+            body: JSON.stringify({ brugernavn: brugernavn, tema: tema})
+        });
+    }
+});

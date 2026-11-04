@@ -1,79 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap%22
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap%22
+        rel=" stylesheet">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
- 
+
 </head>
- 
+
 <body>
- 
+
     <header>
         <div id="header-container">
             <img src="simon_filer/Logo.svg" id="logo" alt="">
             <a href="simon.html" id="home-nav">DMI</a>
+            <form class="registrer-form">
+                <input type="text" id="registrer" name="registrer"
+                    placeholder="Indtast dit navn for at registrere dig som bruger">
+                <button type="submit" id="registrer-knap">Register her</button>
+                <p id="registrer-besked"></p>
+
+            </form>
         </div>
         <ul id="nav">
             <li>Vejret</li>
             <li>Danmark</li>
             <li>Prognose</li>
+            <button id="toggle-mode">Dark mode</button>
         </ul>
     </header>
- 
- 
+
+
     <main>
         <div class="two-column-grid">
             <div class="weather-section">
- 
+
                 <div class="search-card">
                     <h2>Se vejret</h2>
- 
+
                     <form class="search-form">
                         <input type="search" id="city" name="city" placeholder="Søg efter en by">
                         <button type="submit" aria-label="Søg">&#128269;</button>
                     </form>
                 </div>
- 
+
                 <!-- sektion kort som viser dagens vejr og de næste 2 dage -->
-                 <div class="weather-result">
+                <div class="weather-result">
                     <section class="weather_location">
                         <h2 id="cityName"></h2>
                     </section>
 
-                    <section class = "todays_weather">
-                        <p id = "day"></p>
-                        
+                    <section class="todays_weather">
+                        <p id="day"></p>
+
                         <div class="weather_info">
-                            <img id = "weather_icon_today" src="" alt="weather_icon_today">
+                            <img id="weather_icon_today" src="" alt="weather_icon_today">
 
                             <div class="today_weather_data">
-                                <p id = "temperatur"></p>
-                                <p>vind <span id = "currentWind">---</span> m/s </span></p>
-                                <p id = "currentTime"></p>
+                                <p id="temperatur"></p>
+                                <p>vind <span id="currentWind">---</span> m/s </span></p>
+                                <p id="currentTime"></p>
                             </div>
                         </div>
                     </section>
 
                     <div class="forecast">
                         <article class="forecast_day">
-                            <p id = "day1"></p>
-                            <img id = "weather_icon_day1" src="" alt="weather_icon_day">
-                            <p id = "temperatur_day1"></p>
+                            <p id="day1"></p>
+                            <img id="weather_icon_day1" src="" alt="weather_icon_day">
+                            <p id="temperatur_day1"></p>
                         </article>
 
                         <article class="forecast_day">
-                            <p id = "day2"></p>
-                            <img id = "weather_icon_day2" src="" alt="weather_icon_day">
-                            <p id = "temperatur_day2"></p>
+                            <p id="day2"></p>
+                            <img id="weather_icon_day2" src="" alt="weather_icon_day">
+                            <p id="temperatur_day2"></p>
                         </article>
                     </div>
                 </div>
@@ -81,17 +88,17 @@
 
 
             </div>
- 
+
             <div class="clothing-section">
                 <div class="picture-container">
                     <div class="picture-card">
                         <img src="images/rainy1.png" alt="alt text">
                     </div>
- 
+
                     <div class="picture-card">
                         <img src="images/rainy2.png" alt="alt text">
                     </div>
- 
+
                     <div class="picture-card">
                         <img src="images/rainy3.png" alt="alt text">
                     </div>
@@ -103,20 +110,20 @@
                         molestias illo dignissimos, pariatur sapiente.</p>
                 </div>
             </div>
- 
+
         </div>
     </main>
- 
- 
+
+
     <footer>
         <h4>Nicklas Oliver Bornefelt Madsen</h4>
         <h4>Nicoline Kielberg</h4>
         <h4>Nirvana Snebjørk Leth</h4>
         <h4>Simon Andersen</h4>
     </footer>
- 
+
 </body>
- 
+
 <button onclick="findGeoLocation()">
     Find min lokation
 </button>

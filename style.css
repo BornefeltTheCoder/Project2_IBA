@@ -260,6 +260,33 @@ main {
   height: 100vh;
   background-color: #F9F9F9;
 }
+
+#registrer {
+  min-width: 20rem;
+  padding: .3rem;
+}
+
+#registrer-knap {
+  width: 7rem;
+  padding: .3rem;
+}
+
+.registrer-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #a3a3a3;
+}
+
+#toggle-mode {
+  padding: .5rem;
+  border-radius: .5rem;
+}
+
  
 @media only screen and (max-width: 767px) {
   footer {
@@ -272,3 +299,4 @@ main {
     font-size: 1rem;
   }
 }
+
