@@ -322,6 +322,11 @@ async function registrerBruger(brugernavn) {
         inputField.value = "";
         lockScreen.close();
 
+         const greeting = document.querySelector(".text-card h2");
+        if (greeting) {
+            greeting.textContent = "Hej " + brugernavn;
+        }
+
     } catch (error) {
         console.error("Fejl ved registrering", error);
         warningText.textContent = "Kunne ikke kontakte serveren.";
