@@ -1,3 +1,4 @@
+
 //tekster til påklædning
 const clothingText = {
     rainy: {
@@ -59,7 +60,7 @@ function brugDefaultLokation() {
 async function hentVejrData(latitude, longitude, byNavn) {
     //laver en url til serveren med brugerens koordinater som query parametre
     const url = `/vejr?latitude=${latitude}&longitude=${longitude}`;
-
+    
     try {
         //sender en http request til vores node.js server og venter på response
         const response = await fetch(url);
@@ -151,6 +152,9 @@ function visBilleder(vejrKode, temperatur) {
 
 function visVejrIcon(vejrKode, billedID) {
     const vejrIkon = document.getElementById(billedID);
+    if(!vejrIkon) {
+        console.error("HTML-element blev ikke fundet");
+    }
     vejrIkon.src = `images/weather_icons/${vejrKode}.png`;
     vejrIkon.alt = `Vejr ikon for kode ${vejrKode}`;
 }
@@ -158,12 +162,18 @@ function visVejrIcon(vejrKode, billedID) {
 //funktion til at finde brugerens by
 async function visByNavn(latitude, longitude) {
     try {
-        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=da`;
+        const url = `https://photon.komoot.io/reverse?lon=${longitude}&lat=${latitude}&lang=en`;
 
         const response = await fetch(url);
+        if(!response.ok) {
+            throw new error("fejl fra Photon API" + response.status);
+        }
         const data = await response.json();
-        const byNavn = data.address.city;
-        document.getElementById("cityName").textContent = byNavn || "Ukendt by";
+
+        const properties = data.features[0]?.properties;
+
+        const byNavn = properties?.city || properties?.town || properties?.village || "Ukendt by";
+        document.getElementById("cityName").textContent = byNavn;
 
     } catch (error) {
         console.error("Fejl ved hentning af bynavn:", error);
@@ -196,6 +206,7 @@ function hentUgedage(data) {
         new Date(data.daily.time[2] + "T00:00:00").toLocaleDateString("da-DK", { weekday: "long" });
 }
 
+
 const searchForm = document.querySelector(".search-form");
 const cityInput = document.querySelector("#city");
 const weatherResult = document.querySelector(".weather-result");
@@ -207,6 +218,26 @@ const locationRegex = /^(?:\d{4}(?:\s+[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*)?|[\p
 function validateLocation(location) {
     // .test() kontrollerer om inputtet matcher RegEx'en og returnerer true eller false
     return locationRegex.test(location);
+}
+
+async function søgEfterBy(location) {
+    try{
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}&count=10&language=da&format=json&countryCode=DK`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if(!data.results) {
+            weatherResult.textContent = "Kunne ikke finde indtastede by";
+            return;
+        }
+        const by = data.results[0];
+
+        hentVejrData(by.latitude, by.longitude, by.name);
+    } catch (error) {
+        console.error("fejl ved søgning", error)
+        weatherResult.textContent = "der opstod en fejl ved søgning"
+    }
 }
 
 // Registrerer når brugeren søger
@@ -221,9 +252,11 @@ searchForm.addEventListener("submit", function (event) {
     // Her kan API-funktionen senere kaldes med location
     if (validateLocation(location)) {
         weatherResult.style.display = "block";
+       
 
         // Midlertidig testtekst - erstattes når API'en kobles på
         weatherResult.textContent = `Søger efter: ${location}`;
+        søgEfterBy(location);
 
     } else {
         weatherResult.style.display = "block";
