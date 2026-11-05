@@ -250,16 +250,16 @@ async function søgEfterBy(location) {
         const response = await fetch(url);
         const data = await response.json();
 
-        if(!data.results) {
-            weatherResult.textContent = "Kunne ikke finde indtastede by";
+        if(!data.results || data.results.length===0) {
+           console.log("ingen by fundet for:" + location)
             return;
         }
+
         const by = data.results[0];
 
-        hentVejrData(by.latitude, by.longitude, by.name);
+        await hentVejrData(by.latitude, by.longitude, by.name);
     } catch (error) {
         console.error("fejl ved søgning", error)
-        weatherResult.textContent = "der opstod en fejl ved søgning"
     }
 }
 
@@ -270,25 +270,13 @@ searchForm.addEventListener("submit", function (event) {
 
     // Henter og rydder brugerens input
     const location = cityInput.value.trim();
-
-    // Kontrollerer om inputtet er gyldigt
-    // Her kan API-funktionen senere kaldes med location
     if (validateLocation(location)) {
-        weatherResult.style.display = "block";
-       
-
-        // Midlertidig testtekst - erstattes når API'en kobles på
-        weatherResult.textContent = `Søger efter: ${location}`;
         søgEfterBy(location);
 
     } else {
-        weatherResult.style.display = "block";
-
-        // Viser fejlbesked ved ugyldigt input
-        weatherResult.textContent = "Indtast venligst et gyldigt dansk bynavn eller postnummer.";
+        console.warn("ugyldigt input:" + location)
     }
 });
-
 
 // ---------- BRUGERREGISTRERING (dialog) ----------
 // NYT: Erstatter den gamle registrerings-formular. Dialogen (#lock-screen) står i index.html.
