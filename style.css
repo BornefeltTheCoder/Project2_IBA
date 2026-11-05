@@ -203,8 +203,9 @@ body.dark-mode {
 
 .today-weather {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 4px;
 }
 
 #weather_icon_today {
@@ -215,8 +216,21 @@ body.dark-mode {
 
 .today-weather-data {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 8px;
+}
+
+.today-weather-data p:last-child {
+    border-left: 1px solid #ccc;
+    padding-left: 1rem;
+    margin: 0;
+}
+
+.wind-icon {
+    width: 1.2em;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 0.3rem;
 }
 
 /* KOMMENDE DAGE */
@@ -226,6 +240,8 @@ body.dark-mode {
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   gap: 24px;
+  border-left: 1px solid #ccc;
+  padding-left: 1.5rem;
 }
 
 .forecast-day {
@@ -233,6 +249,7 @@ body.dark-mode {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  text-transform: capitalize;
 }
 
 .forecast-day img {

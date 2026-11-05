@@ -99,7 +99,6 @@ function visVejrData(data) {
 
     document.getElementById("temperatur").textContent = temperatur + "°C";
     document.getElementById("currentWind").textContent = vindHastighed;
-    document.getElementById("currentTime").textContent = data.current.time.split("T")[1];
 
     visNæsteDagesTemperatur(data);
     hentUgedage(data);
@@ -219,9 +218,6 @@ function visNæsteDagesTemperatur(data) {
 }
 
 function hentUgedage(data) {
-    document.getElementById("day").textContent =
-        new Date(data.daily.time[0] + "T00:00:00").toLocaleDateString("da-DK", { weekday: "long" });
-
     document.getElementById("day1").textContent =
         new Date(data.daily.time[1] + "T00:00:00").toLocaleDateString("da-DK", { weekday: "long" });
 
