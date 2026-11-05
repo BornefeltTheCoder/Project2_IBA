@@ -228,7 +228,6 @@ function hentUgedage(data) {
 
 const searchForm = document.querySelector(".search-form");
 const cityInput = document.querySelector("#city");
-const weatherResult = document.querySelector(".weather-result");
 
 // RegEx til danske bynavne og postnumre
 const locationRegex = /^(?:\d{4}(?:\s+[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*)?|[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*)$/u;
