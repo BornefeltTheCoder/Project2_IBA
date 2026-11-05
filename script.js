@@ -94,7 +94,8 @@ function visVejrData(data) {
     const vindHastighed = data.current.wind_speed_10m; //henter vindhastighed fra dataen
 
     visBilleder(vejrKode, temperatur);
-    visVejrIcon(vejrKode, "weather_icon_today");
+   //rettet så det passer med visVejrIcon function
+    visVejrIcon(data.current.weather_code, "weather_icon_today");
 
     document.getElementById("temperatur").textContent = temperatur + "°C";
     document.getElementById("currentWind").textContent = vindHastighed;
@@ -150,13 +151,34 @@ function visBilleder(vejrKode, temperatur) {
     }
 }
 
+//opdateret function til korrekt visning af ikoner
 function visVejrIcon(vejrKode, billedID) {
     const vejrIkon = document.getElementById(billedID);
-    if(!vejrIkon) {
-        console.error("HTML-element blev ikke fundet");
+
+    let ikon;
+
+    const erKlar = vejrKode === 0;
+    const erSkyet = vejrKode >= 1 && vejrKode <= 3;
+    const erRegn = (vejrKode >= 51 && vejrKode <= 67) || (vejrKode >= 80 && vejrKode <= 82);
+    const erSne = (vejrKode >= 71 && vejrKode <= 77) || (vejrKode >= 85 && vejrKode <= 86);
+    const erTorden = vejrKode >= 95 && vejrKode <= 99;
+
+    if (erKlar) {
+        ikon = "klar";
+    } else if (erSkyet) {
+        ikon = "skyet";
+    } else if (erRegn) {
+        ikon = "regn";
+    } else if (erSne) {
+        ikon = "sne";
+    } else if (erTorden) {
+        ikon = "torden";
+    } else {
+        ikon = "skyet"; // fallback, fx tåge (45, 48) som ikke er dækket
     }
-    vejrIkon.src = `images/weather_icons/${vejrKode}.png`;
-    vejrIkon.alt = `Vejr ikon for kode ${vejrKode}`;
+
+    vejrIkon.src = `images/icons/${ikon}.png`;
+    vejrIkon.alt = `Vejrikon: ${ikon}`;
 }
 
 //funktion til at finde brugerens by
@@ -191,8 +213,9 @@ function visNæsteDagesTemperatur(data) {
     document.getElementById("temperatur_day1").textContent = temperaturDag1 + "°C";
     document.getElementById("temperatur_day2").textContent = temperaturDag2 + "°C";
 
-    visVejrIcon(vejrKodeDag1, "weather_icon_day1");
-    visVejrIcon(vejrKodeDag2, "weather_icon_day2");
+    //rettet så den passer med visVejrIcons funktion
+    visVejrIcon(data.daily.weather_code[1], "weather_icon_day1");
+    visVejrIcon(data.daily.weather_code[2], "weather_icon_day2");
 }
 
 function hentUgedage(data) {
